@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通霄環境生態與淺山保育 - 拼圖闖關</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --accent-color: #ff9800;
+            --bg-color: #f1f8e9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei';
+            text-align: center;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(#dcedc8 20%, transparent 20%), radial-gradient(#dcedc8 20%, transparent 20%);
+            background-color: var(--bg-color);
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+        }
+
+        .header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 3px solid var(--secondary-color);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-size: 1.2rem;
+            font-weight: normal;
+        }
+
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px auto;
+            max-width: 1000px;
+        }
+
+        .animal-card {
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #e8f5e9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 130px;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: var(--secondary-color);
+        }
+
+        .animal {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.2s;
+            background-color: #eee; /* Placeholder color */
+        }
+
+        .animal.animate {
+            animation: shake 0.4s infinite;
+            border: 3px solid var(--accent-color);
+        }
+
+        .animal-label {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(0deg) scale(1.05); }
+            25% { transform: rotate(5deg) scale(1.05); }
+            50% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+            100% { transform: rotate(0deg) scale(1.05); }
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background-color: #f57c00;
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-green { background-color: var(--secondary-color); }
+        .btn-green:hover { background-color: var(--primary-color); }
+
+        #resultText {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #d84315;
+            margin: 20px 0;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        #puzzleOptions p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        #puzzleContainer {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: inline-block;
+            margin-top: 20px;
+            border: 4px solid var(--secondary-color);
+            max-width: 95vw;
+        }
+
+        #puzzleSection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .image-preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-preview-box p {
+            margin: 0 0 10px 0;
+            font-weight: bold;
+            color: #555;
+            background: #eee;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        #selectedImageRef {
+            width: 240px;
+            height: 240px;
+            object-fit: cover;
+            border: 4px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .canvas-wrapper {
+            position: relative;
+        }
+
+        canvas#puzzleCanvas {
+            border: 6px solid #8d6e63; /* Wood-like border */
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.3);
+            background-color: #ccc;
+            cursor: pointer;
+            max-width: 100%;
+            height: auto;
+        }
+
+        #timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px;
+            background: #e8f5e9;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 2px dashed var(--secondary-color);
+        }
+
+        .instruction {
+            color: #e65100;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>通霄環境生態與淺山保育</h1>
+        <h2>探索淺山地理、植物與動物的奧秘</h2>
+    </div>
+
+    <div id="gallery"></div>
+    
+    <div>
+        <button id="drawButton" class="btn">🎲 抽籤決定闖關圖卡！</button>
+    </div>
+    
+    <div id="resultText"></div>
+    
+    <div id="puzzleOptions" style="display:none">
+        <p>請選擇拼圖難度：</p>
+        <button class="btn btn-green" onclick="startPuzzle(3)">簡單 (3x3)</button>
+        <button class="btn btn-green" onclick="startPuzzle(4)">中等 (4x4)</button>
+        <button class="btn btn-green" onclick="startPuzzle(5)">挑戰 (5x5)</button>
+    </div>
+
+    <div id="puzzleContainer" style="display:none">
+        <div id="timer"></div>
+        <p class="instruction">💡 玩法提示：點擊兩塊拼圖，就可以交換它們的位置喔！</p>
+        <div id="puzzleSection">
+            <div class="image-preview-box">
+                <p>參考圖</p>
+                <img id="selectedImageRef" />
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="puzzleCanvas" width="480" height="480"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="confetti" class="confetti"></canvas>
+
+    <!-- 音效資源 -->
+    <audio id="drawSound" src="https://www.soundjay.com/misc/magic-chime-02.mp3"></audio>
+    <audio id="selectSound" src="https://www.soundjay.com/bathroom/sounds/deodorant-spray-1.mp3"></audio>
+    <audio id="successSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+
+<script>
+    // 【修改區】這裡設定 8 張通霄環境生態圖卡，請將您的圖片檔名對應修改為以下名稱
+    const cardsData = [
+        { name: "山海交匯", file: "slide1.png" },
+        { name: "風火淬鍊", file: "slide2.png" },
+        { name: "砂丘防風", file: "slide3.png" },
+        { name: "鑲嵌地景", file: "slide4.png" },
+        { name: "淺山王者-石虎", file: "slide5.png" },
+        { name: "漏蘆珍寶", file: "slide6.png" },
+        { name: "植物耐火策略", file: "slide7.png" },
+        { name: "夜行群聚", file: "slide8.png" }
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const drawButton = document.getElementById('drawButton');
+    const puzzleOptions = document.getElementById('puzzleOptions');
+    const puzzleContainer = document.getElementById('puzzleContainer');
+    const canvas = document.getElementById('puzzleCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    const drawSound = document.getElementById('drawSound');
+    const selectSound = document.getElementById('selectSound');
+    const successSound = document.getElementById('successSound');
+    
+    const selectedImageRef = document.getElementById('selectedImageRef');
+    const resultText = document.getElementById('resultText');
+    const timerDisplay = document.getElementById('timer');
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
+
+    let chosenCard = null;
+    let chosenImage = new Image();
+    let puzzleSize = 3;
+    let board = [];
+    let firstSelection = null; // 記錄第一次點擊的拼圖索引
+    let timerInterval;
+    let startTime;
+    let confettiInterval;
+    let isPuzzleSolved = false;
+
+    // 1. 初始化畫廊
+    cardsData.forEach(cardData => {
+        const card = document.createElement('div');
+        card.className = 'animal-card';
+        const div = document.createElement('div');
+        div.className = 'animal';
+        // 如果圖片找不到，預設顯示灰色背景
+        div.style.backgroundImage = `url(${cardData.file})`;
+        const label = document.createElement('div');
+        label.className = 'animal-label';
+        label.textContent = cardData.name;
+        card.appendChild(div);
+        card.appendChild(label);
+        gallery.appendChild(card);
+    });
+
+    // 2. 抽籤功能
+    drawButton.onclick = () => {
+        resetGame();
+        const divs = document.querySelectorAll('.animal');
+        divs.forEach(div => div.classList.add('animate'));
+        
+        // 重置音效並播放
+        drawSound.currentTime = 0; 
+        drawSound.play().catch(e => console.log("音效播放被瀏覽器阻擋", e));
+
+        setTimeout(() => {
+            divs.forEach(div => div.classList.remove('animate'));
+            const index = Math.floor(Math.random() * cardsData.length);
+            chosenCard = cardsData[index];
+            resultText.textContent = `🎯 你抽到的闖關圖卡是：【 ${chosenCard.name} 】`;
+            
+            selectedImageRef.src = chosenCard.file;
+            chosenImage.src = chosenCard.file;
+            
+            puzzleOptions.style.display = 'block';
+            selectSound.currentTime = 0;
+            selectSound.play().catch(e => {});
+        }, 2000);
+    };
+
+    // 3. 開始拼圖
+    function startPuzzle(size) {
+        resetGameStates();
+        puzzleSize = size;
+        puzzleContainer.style.display = 'inline-block';
+        timerDisplay.style.display = 'inline-block';
+        timerDisplay.textContent = '準備中...';
+
+        if (chosenImage.complete && chosenImage.naturalWidth > 0) {
+            initBoard();
+            drawPuzzle();
+            canvas.onclick = handleCanvasClick;
+            startTimer();
+        } else {
+            chosenImage.onload = () => {
+                chosenImage.onload = null;
+                initBoard();
+                drawPuzzle();
+                canvas.onclick = handleCanvasClick;
+                startTimer();
+            };
+            chosenImage.onerror = () => {
+                alert("圖片載入失敗，請確認圖片檔名是否正確並放在同一資料夾內！");
+            };
+        }
+    }
+
+    // 重置整個畫面與遊戲
+    function resetGame() {
+        resetGameStates();
+        puzzleOptions.style.display = 'none';
+        resultText.textContent = '';
+        puzzleContainer.style.display = 'none';
+    }
+
+    // 僅重置遊戲狀態（保留抽籤結果）
+    function resetGameStates() {
+        clearInterval(timerInterval);
+        clearInterval(confettiInterval);
+        isPuzzleSolved = false;
+        firstSelection = null;
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        canvas.onclick = null;
+    }
+
+    // 初始化拼圖陣列並打亂
+    function initBoard() {
+        board = [];
+        const totalPieces = puzzleSize * puzzleSize;
+        for (let i = 0; i < totalPieces; i++) {
+            board.push({
+                x: i % puzzleSize,
+                y: Math.floor(i / puzzleSize),
+                originalIndex: i
+            });
+        }
+        // 隨機打亂陣列（適用於交換式拼圖）
+        for (let i = board.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [board[i], board[j]] = [board[j], board[i]];
+        }
+    }
+
+    // 繪製拼圖
+    function drawPuzzle() {
+        const tileW = canvas.width / puzzleSize;
+        const tileH = canvas.height / puzzleSize;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < board.length; i++) {
+            const posX = (i % puzzleSize) * tileW;
+            const posY = Math.floor(i / puzzleSize) * tileH;
+            const tile = board[i];
+
+            const sourceW = chosenImage.naturalWidth / puzzleSize;
+            const sourceH = chosenImage.naturalHeight / puzzleSize;
+            const sourceX = tile.x * sourceW;
+            const sourceY = tile.y * sourceH;
+
+            // 畫出圖片碎片
+            ctx.drawImage(chosenImage, sourceX, sourceY, sourceW, sourceH, posX, posY, tileW, tileH);
+
+            // 判斷是否是被選取的狀態
+            if (firstSelection === i) {
+                // 畫上半透明黃色遮罩代表選取中
+                ctx.fillStyle = 'rgba(255, 235, 59, 0.4)';
+                ctx.fillRect(posX, posY, tileW, tileH);
+                // 畫橘色粗邊框
+                ctx.strokeStyle = '#ff9800';
+                ctx.lineWidth = 4;
+            } else {
+                // 畫一般白色邊框
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+            }
+            ctx.strokeRect(posX, posY, tileW, tileH);
+        }
+    }
+
+    // 處理畫布點擊（交換邏輯）
+    function handleCanvasClick(e) {
+        if (isPuzzleSolved) return;
+
+        // 計算點擊的是哪一塊
+        const rect = canvas.getBoundingClientRect();
+        // 修正響應式縮放導致的座標誤差
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+        
+        const tileW = canvas.width / puzzleSize;
+        const tileH = canvas.height / puzzleSize;
+        const col = Math.floor(x / tileW);
+        const row = Math.floor(y / tileH);
+        const index = row * puzzleSize + col;
+
+        if (col < 0 || col >= puzzleSize || row < 0 || row >= puzzleSize) return;
+
+        if (firstSelection === null) {
+            // 第一次點擊：記錄並重繪以顯示高亮
+            firstSelection = index;
+            drawPuzzle();
+            selectSound.currentTime = 0;
+            selectSound.play().catch(e=>{});
+        } else {
+            // 第二次點擊
+            if (firstSelection === index) {
+                // 點擊同一塊：取消選取
+                firstSelection = null;
+                drawPuzzle();
+            } else {
+                // 點擊不同塊：交換位置
+                const temp = board[firstSelection];
+                board[firstSelection] = board[index];
+                board[index] = temp;
+                
+                firstSelection = null;
+                drawPuzzle();
+                
+                selectSound.currentTime = 0;
+                selectSound.play().catch(e=>{});
+                
+                // 延遲一點點檢查是否過關，讓畫面先更新
+                setTimeout(checkPuzzleSolved, 100);
+            }
+        }
+    }
+
+    // 檢查是否完成拼圖
+    function checkPuzzleSolved() {
+        if (isPuzzleSolved) return;
+        
+        let solved = true;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i].originalIndex !== i) {
+                solved = false;
+                break;
+            }
+        }
+
+        if (solved) {
+            clearInterval(timerInterval);
+            firstSelection = null;
+            drawPuzzle(); // 畫出最後完整沒有框線高亮的圖
+            
+            successSound.currentTime = 0;
+            successSound.play().catch(e=>{});
+            isPuzzleSolved = true;
+            
+            launchConfetti();
+            
+            setTimeout(() => {
+                alert(`🎉 恭喜通關！\n你成功拼出了【${chosenCard.name}】\n${timerDisplay.textContent}`);
+            }, 300);
+        }
+    }
+
+    // 計時器
+    function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            timerDisplay.textContent = `⏱️ 已花費時間：${elapsed} 秒`;
+        }, 1000);
+    }
+
+    // 撒花慶祝動畫
+    function launchConfetti() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+        
+        const confettiCount = 150;
+        const confetti = [];
+        
+        for (let i = 0; i < confettiCount; i++) {
+            confetti.push({
+                x: Math.random() * confettiCanvas.width,
+                y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+                r: Math.random() * 6 + 4,
+                d: Math.random() * 10 + 10,
+                color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                tilt: Math.random() * 10 - 5
+            });
+        }
+
+        clearInterval(confettiInterval);
+        
+        confettiInterval = setInterval(() => {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            
+            confetti.forEach(c => {
+                c.y += c.d * 0.1;
+                c.tilt += c.d * 0.01;
+                
+                confettiCtx.beginPath();
+                confettiCtx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+                confettiCtx.fillStyle = c.color;
+                confettiCtx.fill();
+                
+                if (c.y > confettiCanvas.height) {
+                    c.y = -c.r;
+                    c.x = Math.random() * confettiCanvas.width;
+                }
+            });
+        }, 30);
+    }
+
+    // 視窗大小改變時重設彩帶畫布
+    window.addEventListener('resize', () => {
+        if (confettiInterval) {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+    });
+
+    window.addEventListener('load', () => {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+    });
+
+</script>
+<script src='https://tayalan.yay.boo/javascripts/yayboo.js'></script>
+</body>
+</html>
